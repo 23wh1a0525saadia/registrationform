@@ -1,21 +1,33 @@
-pipeline { 
-    agent any 
- 
-    stages { 
-        stage('Checkout') { 
-            steps { 
-                git branch: 'main', url: 'https://github.com/23WH1A0525saadia/registrationform.git' 
-            } 
-        } 
- 
-        stage('Package') { 
-            steps { 
-                bat 'powershell Compress-Archive -Path Hack2Solve.html -DestinationPath 
-registration-form.zip -Force' 
-                archiveArtifacts artifacts: 'registration-form.zip', fingerprint: true 
-            } 
-        } 
-    } 
-} 
- 
- 
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Cloning GitHub repository...'
+                git branch: 'main', url: 'https://github.com/23WH1A0525saadia/registrationform.git'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Creating ZIP package...'
+                // PowerShell command to compress the HTML file
+                bat '''
+                    powershell Compress-Archive -Path Hack2Solve.html -DestinationPath registration-form.zip -Force
+                '''
+                echo 'Archiving the generated ZIP file...'
+                archiveArtifacts artifacts: 'registration-form.zip', fingerprint: true
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline executed successfully!'
+        }
+        failure {
+            echo '❌ Pipeline failed. Please check the logs.'
+        }
+    }
+}
