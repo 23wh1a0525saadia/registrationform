@@ -10,7 +10,7 @@ pipeline {
  
         stage('Package') { 
             steps { 
-                bat 'powershell Compress-Archive -Path Registration.html -DestinationPath 
+                bat 'powershell Compress-Archive -Path Hack2Solve.html -DestinationPath 
 registration-form.zip -Force' 
                 archiveArtifacts artifacts: 'registration-form.zip', fingerprint: true 
             } 
